@@ -1,2 +1,3 @@
 rootProject.name='android_projekt'
 include ':app'
+include ':lib'
