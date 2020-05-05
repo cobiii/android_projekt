@@ -3,6 +3,8 @@ package com.example.android_projekt;
 import android.app.Application;
 import android.util.Log;
 
+import com.example.android_projekt.events.MyEventError;
+import com.example.android_projekt.events.MyEventInfo;
 import com.example.lib.WatchList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.greenrobot.eventbus.EventBus;
 
 public class ApplicationMy extends Application {
     public static final String TAG = ApplicationMy.class.getName();
@@ -49,7 +52,8 @@ public class ApplicationMy extends Application {
         String tmp = getGson().toJson(watchList);
         Log.d(TAG, tmp);
         WatchList b = getGson().fromJson(tmp,WatchList.class);
-        Log.d(TAG, b.toString());
+        EventBus.getDefault().post(new MyEventInfo("Watchlist: "+b.toString()));
+        //Log.d(TAG, b.toString());
 
 
     }
@@ -57,8 +61,11 @@ public class ApplicationMy extends Application {
     public void saveToFile() {
         try {
             FileUtils.writeStringToFile(getFile(), getGson().toJson(watchList));
+            EventBus.getDefault().post(new MyEventInfo("Saved "+file.getPath()));
         } catch (IOException e) {
-            Log.d(TAG, "Can't save "+file.getPath());
+            String msg = "Can't save "+file.getPath();
+            EventBus.getDefault().post(new MyEventError(1,msg));
+            //Log.d(TAG, "Can't save "+file.getPath());
         }
     }
 
@@ -66,7 +73,9 @@ public class ApplicationMy extends Application {
         if (!getFile().exists())  return false;
         try {
             watchList = getGson().fromJson(FileUtils.readFileToString(getFile()), WatchList.class);
+            EventBus.getDefault().post(new MyEventInfo("Read from file "));
         } catch (IOException e) {
+            EventBus.getDefault().post(new MyEventError(2,"File problem"+e.getMessage()));
             return false;
         }
         return true;
