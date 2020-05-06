@@ -3,28 +3,37 @@ package com.example.lib;
 import java.util.ArrayList;
 
 public class Movie {
-    protected String name;
-    protected String description;
+    protected String title;
+    protected String synopsis;
+    protected String genre;
+    protected String director;
     protected String writer;
-    ArrayList<String> cast;
-    ArrayList<String> prize;
+    protected String runningTimeStr;
+    protected String studio;
+    protected String poster;
+    protected String boxoffice;
 
-    public Movie(String name, String description, String writer) {
-        this.name=name;
-        this.description=description;
+
+    public Movie(String title, String synopsis, String genre,String director,String writer,String runningTimeStr,String studio,String poster, String boxoffice) {
+        this.title=title;
+        this.synopsis=synopsis;
+        this.genre=genre;
+        this.director=director;
         this.writer=writer;
-        cast=new ArrayList<String>();
-        prize=new ArrayList<String>();
+        this.runningTimeStr=runningTimeStr;
+        this.studio=studio;
+        this.poster=poster;
+        this.boxoffice=boxoffice;
     }
 
-    public void addCast(String a) {cast.add(a);}
-    public void addPrize(String a) {prize.add(a);}
-    public int sizeCast() {return cast.size();}
-    public int sizePrize() {return prize.size();}
-
-    public String getName() {return name;}
-    public String getDescription() {return description;}
+    public String getTitle() {return title;}
+    public String getSynopsis() {return synopsis;}
+    public String getGenre() {return writer;}
+    public String getDirector() { return director; }
     public String getWriter() {return writer;}
-    public ArrayList<String> getCast() {return cast;}
-    public ArrayList<String> getPrize() {return prize;}
+    public String getRunningTimeStr() { return runningTimeStr; }
+    public String getPoster() { return poster; }
+    public String getStudio() { return studio; }
+    public String getBoxoffice() { return boxoffice; }
+
 }
