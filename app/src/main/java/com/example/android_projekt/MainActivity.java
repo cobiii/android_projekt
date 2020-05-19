@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,23 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private Integer[] moviesImages = new Integer[]{
+            R.drawable.theshawshankredemption,R.drawable.thegodfather,
+            R.drawable.thedarkknight,R.drawable.logan,
+            R.drawable.fightclub,R.drawable.forrestgump,R.drawable.inception,
+            R.drawable.logan,R.drawable.geminiman};
+    private String[] moviesTitles = new String[]{
+            "The Shawshank Redemption","The Godfather","The Dark Knight",
+            "Schindler's List","Fight Club","Forrest Gump","Inception","Logan","Gemini Man"};
+    private String[] moviesYears = new String[]{
+            "1994","1972","2008","1993","1999","1994","2010","2017","2019"};
+    private String[] moviesGenres = new String[]{
+            "Drama","Crime","Action","Biography","Drama","Drama","Sci-Fi","Action","Sci-Fi"};
+    private String[] moviesRates = new String[]{
+            "9,3","9,2","9,0","8,9","8,8","8,8","8,8","8,1","-,-"};
+    ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://192.168.1.111:3000/movies";
-        final TextView textView = (TextView) findViewById(R.id.helloWorld);
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
         (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -64,11 +82,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                textView.setText(error.toString());
+                //textView.setText(error.toString());
             }
         });
 
         queue.add(jsonObjectRequest);
+
+
+
+        this.setTitle("Movies List");
+        listView = (ListView)findViewById(R.id.list_view);
+        movieListAdapter movieListAdapter = new movieListAdapter(
+                moviesImages,moviesTitles,moviesYears,moviesGenres,moviesRates,this);
+        listView.setAdapter(movieListAdapter);
     }
 
     @Override
