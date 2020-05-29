@@ -2,9 +2,12 @@ package com.example.android_projekt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,13 +98,22 @@ public class MainActivity extends AppCompatActivity {
         movieListAdapter movieListAdapter = new movieListAdapter(
                 moviesImages,moviesTitles,moviesYears,moviesGenres,moviesRates,this);
         listView.setAdapter(movieListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(view.getContext(),MovieActivity.class);
+                i.putExtra("position",position);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        EventBus.getDefault().post(new MyEventInfo("Welcome back "));
+        //EventBus.getDefault().post(new MyEventInfo("Welcome back "));
     }
 
     @Override
