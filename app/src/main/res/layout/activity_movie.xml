@@ -6,4 +6,139 @@
     android:layout_height="match_parent"
     tools:context=".MovieActivity">
 
+    <ImageView
+        android:id="@+id/rateMovieStar2"
+        android:layout_width="66dp"
+        android:layout_height="56dp"
+        android:layout_below="@id/genresMovie"
+        android:layout_marginTop="140dp"
+        android:src="@drawable/ic_star_black_24dp"
+        app:layout_constraintStart_toEndOf="@+id/moviePoster"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movieRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/rateMovieStar"
+        android:layout_marginTop="148dp"
+        android:layout_toRightOf="@id/rateMovieStar"
+        android:gravity="center"
+        android:text="8.8"
+        android:textColor="@color/rateTitle"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/rateMovieStar2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/moviePoster"
+        android:layout_width="134dp"
+        android:layout_height="198dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fightclub" />
+
+    <TextView
+        android:id="@+id/movieTitle"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:text="One Flew Over The Cuckoo's Nest (2001)"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/moviePoster"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movieGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Drama"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/moviePoster"
+        app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
+
+    <TextView
+        android:id="@+id/movieSynopsis"
+        android:layout_width="377dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="224dp"
+        android:text="Thirteen-year-old Lili fights to protect her dog Hagen. She is devastated when her father eventually sets Hagen free on the streets. Still innocently believing love can conquer any difficulty, Lili sets out to find her dog and save him."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movieDirector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Director: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieSynopsis" />
+
+    <TextView
+        android:id="@+id/movieWriter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Writer: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieDirector" />
+
+    <Button
+        android:id="@+id/movieAddToWatchlist"
+        android:layout_width="285dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="4dp"
+        android:background="#6C79CD"
+        android:drawableLeft="@drawable/ic_add_white_24dp"
+        android:text="Add to Watchlist"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.134"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieWriter" />
+
+    <TextView
+        android:id="@+id/movieStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Start: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="402dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieAddToWatchlist" />
+
+    <TextView
+        android:id="@+id/movieStudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Studio: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieStartTime" />
+
+    <TextView
+        android:id="@+id/movieBoxOffice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="BoxOffice: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieStudio" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
