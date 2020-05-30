@@ -28,7 +28,7 @@ public class Movie {
 
     public String getTitle() {return title;}
     public String getSynopsis() {return synopsis;}
-    public String getGenre() {return writer;}
+    public String getGenre() {return genre;}
     public String getDirector() { return director; }
     public String getWriter() {return writer;}
     public String getRunningTimeStr() { return runningTimeStr; }
