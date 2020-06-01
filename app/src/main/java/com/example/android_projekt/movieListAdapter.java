@@ -1,6 +1,7 @@
 package com.example.android_projekt;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,27 +9,26 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.lib.Movie;
+import com.example.lib.Movies;
+import com.squareup.picasso.Picasso;
+
 public class movieListAdapter extends BaseAdapter {
-    private Integer[] moviesImages;
-    private String[] moviesTitles, moviesYears, moviesGenres, moviesRates;
     private LayoutInflater inflter;
     private Context context;
     private ImageView movieImg;
     private TextView movieTitle, yearMovie, genresMovie, rateMovie;
+    private Movies movies;
 
-    public movieListAdapter(Integer[] moviesImages, String[] moviesTitles, String[] moviesYears,
-                            String[] moviesGenres, String[] moviesRates, Context context) {
-        this.moviesImages = moviesImages;
-        this.moviesTitles = moviesTitles;
-        this.moviesYears = moviesYears;
-        this.moviesGenres = moviesGenres;
-        this.moviesRates = moviesRates;
+    public movieListAdapter(Context context, Movies movies) {
+        this.movies = movies;
         this.context = context;
         inflter = (LayoutInflater.from(context));
     }
+
     @Override
     public int getCount() {
-        return moviesTitles.length;
+        return movies.getList().size();
     }
 
     @Override
@@ -49,10 +49,12 @@ public class movieListAdapter extends BaseAdapter {
         yearMovie = view.findViewById(R.id.yearMovie);
         genresMovie = view.findViewById(R.id.genresMovie);
         rateMovie = view.findViewById(R.id.rateMovie);
-        movieImg.setImageResource(moviesImages[position]);
-        movieTitle.setText(moviesTitles[position]);
-        yearMovie.setText(moviesYears[position]);
-        genresMovie.setText(moviesGenres[position]);
-        rateMovie.setText(moviesRates[position]);
+
+        Picasso.get().load(movies.getList().get(position).getPoster()).into(movieImg);
+        movieTitle.setText(movies.getList().get(position).getTitle());
+        yearMovie.setText(movies.getList().get(position).getYear().toString());
+        genresMovie.setText(movies.getList().get(position).getGenre());
+        rateMovie.setText(String.format("%.1f",movies.getList().get(position).getRating()));
         return view;
-    }}
+    }
+}

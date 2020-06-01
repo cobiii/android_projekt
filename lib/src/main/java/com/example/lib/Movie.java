@@ -1,7 +1,5 @@
 package com.example.lib;
 
-import java.util.ArrayList;
-
 public class Movie {
     protected String title;
     protected String synopsis;
@@ -12,9 +10,12 @@ public class Movie {
     protected String studio;
     protected String poster;
     protected String boxoffice;
+    protected Double rating;
+    protected Integer ratingCount;
+    protected Integer year;
 
 
-    public Movie(String title, String synopsis, String genre,String director,String writer,String runningTimeStr,String studio,String poster, String boxoffice) {
+    public Movie(String title, String synopsis, String genre,String director,String writer,String runningTimeStr,String studio,String poster, String boxoffice, Double rating, Integer ratingCount, Integer year) {
         this.title=title;
         this.synopsis=synopsis;
         this.genre=genre;
@@ -24,6 +25,9 @@ public class Movie {
         this.studio=studio;
         this.poster=poster;
         this.boxoffice=boxoffice;
+        this.rating=rating;
+        this.ratingCount=ratingCount;
+        this.year=year;
     }
 
     public String getTitle() {return title;}
@@ -35,5 +39,7 @@ public class Movie {
     public String getPoster() { return poster; }
     public String getStudio() { return studio; }
     public String getBoxoffice() { return boxoffice; }
-
+    public Double getRating() { return rating; }
+    public Integer getRatingCount() { return ratingCount; }
+    public Integer getYear() { return year; }
 }
