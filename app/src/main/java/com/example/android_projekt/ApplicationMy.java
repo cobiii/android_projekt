@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.android_projekt.events.MyEventError;
 import com.example.android_projekt.events.MyEventInfo;
+import com.example.lib.Movies;
 import com.example.lib.WatchList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,11 +23,23 @@ public class ApplicationMy extends Application {
     public String idAPP;
     static private Gson gson;
     static private File file;
+    private Movies movies;
+
+    public Movies getMovies() {
+        return movies;
+    }
+
+    public void setMovies(Movies movies) {
+        this.movies = movies;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         watchList = new WatchList(); //init data object
+        movies = new Movies();
+
         init();
     }
 
