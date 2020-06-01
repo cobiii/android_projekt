@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lib.Movie;
 import com.example.lib.Movies;
+import com.example.lib.WatchList;
 import com.squareup.picasso.Picasso;
 
 public class MovieActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class MovieActivity extends AppCompatActivity {
     TextView movieStudio;
     TextView movieBoxOffice;
     ImageView moviePoster;
+    Button movieAddToWatchlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,12 @@ public class MovieActivity extends AppCompatActivity {
         Movies movies = ((ApplicationMy)getApplication()).getMovies();
         int position = getIntent().getIntExtra("position",10);
         Movie movieCurrent = movies.getList().get(position);
+        if(getIntent().hasExtra("watchlist")) {
+            WatchList watchList = ((ApplicationMy)getApplication()).getWatchList();
+            movies.setList(watchList.getList());
+            movieCurrent = movies.getList().get(position);
+        }
+
         movieTitle = findViewById(R.id.movieTitle);
         movieGenre = findViewById(R.id.movieGenre);
         movieRating = findViewById(R.id.movieRating);
@@ -58,6 +68,17 @@ public class MovieActivity extends AppCompatActivity {
         //movieBoxOffice.append(movieCurrent.getBoxoffice().toString());
 
         Log.i("gal",String.valueOf(movies.getList().size()));
-        //this.setTitle(movieCurrent.getTitle());
+
+        movieAddToWatchlist = findViewById(R.id.movieAddToWatchlist);
+        final Movie finalMovieCurrent = movieCurrent;
+        movieAddToWatchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WatchList watchList = ((ApplicationMy) getApplication()).getWatchList();
+                watchList.addMovie(finalMovieCurrent);
+                ((ApplicationMy) getApplication()).setWatchList(watchList);
+                Log.e("GASDLSADASLDA",String.valueOf(((ApplicationMy) getApplication()).getWatchList().getList().size()));
+            }
+        });
     }
 }

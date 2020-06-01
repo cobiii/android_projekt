@@ -12,4 +12,8 @@ public class WatchList {
     public ArrayList<Movie> getList() {
         return list;
     }
+
+    public void addMovie(Movie movie) {
+        this.list.add(movie);
+    }
 }
