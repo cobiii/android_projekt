@@ -11,7 +11,7 @@ app.use(bodyParser.json())
 //povezava z bazo
 var mongoose = require('mongoose');
 //Set up default mongoose connection
-var mongoDB = 'mongodb://127.0.0.1/android';
+var mongoDB = 'mongodb+srv://admin:admin@movies-jhvre.mongodb.net/data';
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
@@ -60,10 +60,13 @@ app.get('/addrandom/:int', function(req, res) {
       console.log('statusCode:', response && response.statusCode);
       var parsed = JSON.parse(body);
       console.log(parsed.casts.directors[0].name);
-      
-      Movie.create({ title: parsed.title, synopsis: parsed.synopsis, genre: parsed.genreSet[0].displayName, director: parsed.casts.directors[0].name, writer: parsed.casts.screenwriters[0].name, boxoffice: parsed.boxoffice, runningTimeStr: parsed.runningTimeStr, studio: parsed.studio, poster: parsed.posters.detailed }, function (err, small) {
-        if (err) return handleError(err);
-      });
+      try {
+        Movie.create({ title: parsed.title, synopsis: parsed.synopsis, genre: parsed.genreSet[0].displayName, director: parsed.casts.directors[0].name, writer: parsed.casts.screenwriters[0].name, boxoffice: parsed.boxoffice, runningTimeStr: parsed.runningTimeStr, studio: parsed.studio, poster: parsed.posters.detailed }, function (err, small) {
+          if (err) return handleError(err);
+        });
+      }catch(e) {
+        console.log(e);
+      }
       //console.log('body:', parsed);
     });
   } 
