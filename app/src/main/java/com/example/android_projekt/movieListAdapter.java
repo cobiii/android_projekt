@@ -51,11 +51,10 @@ public class movieListAdapter extends BaseAdapter {
         rateMovie = view.findViewById(R.id.rateMovie);
 
         Picasso.get().load(movies.getList().get(position).getPoster()).into(movieImg);
-        //movieImg.setImageResource(movies.getList().get(position).getPoster());
         movieTitle.setText(movies.getList().get(position).getTitle());
-        //yearMovie.setText(moviesYears[position]);
+        yearMovie.setText(movies.getList().get(position).getYear().toString());
         genresMovie.setText(movies.getList().get(position).getGenre());
-        //rateMovie.setText(moviesRates[position]);
+        rateMovie.setText(String.format("%.1f",movies.getList().get(position).getRating()));
         return view;
     }
 }
