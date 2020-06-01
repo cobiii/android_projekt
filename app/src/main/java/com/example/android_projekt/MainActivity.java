@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.app.ProgressDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] moviesRates = new String[]{
             "9,3","9,2","9,0","8,9","8,8","8,8","8,8","8,1","-,-"};
     ListView listView;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,11 @@ public class MainActivity extends AppCompatActivity {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
         (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             Gson gson = new Gson();
-            Movies movies = new Movies();
             @Override
             public void onResponse(JSONArray response) {
                 // display response
+                new AsyncTaskMovies().execute(response);
+                Movies movies = new Movies();/*
                 for(int x = 0; x < response.length(); x++) {
                     try {
                         JSONObject temp = response.getJSONObject(x);
@@ -78,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
                         EventBus.getDefault().post(new MyEventError(3,e.toString()));
                     }
                 }
+                */
                 //textView.setText(movies.getList().get(0).getTitle());
-                ((ApplicationMy) getApplication()).setMovies(movies);
+                //((ApplicationMy) getApplication()).setMovies(movies);
             }
         }, new Response.ErrorListener() {
 
@@ -94,9 +99,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.setTitle("Movies List");
+/*
         listView = (ListView)findViewById(R.id.list_view);
+        Movies movies1 = ((ApplicationMy) getApplication()).getMovies();
+        //Log.e("gdsadSADASDASDSADSASd",movies1.getList().toString());
         movieListAdapter movieListAdapter = new movieListAdapter(
-                moviesImages,moviesTitles,moviesYears,moviesGenres,moviesRates,this);
+                moviesImages,moviesTitles,moviesYears,moviesGenres,moviesRates,this, movies1);
         listView.setAdapter(movieListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -106,8 +114,58 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("position",position);
                 startActivity(i);
             }
-        });
+        }); */
     }
+
+    public class AsyncTaskMovies extends AsyncTask<JSONArray, Integer, Integer> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // display a progress dialog for good user experiance
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        protected Integer doInBackground(JSONArray... response) {
+            Gson gson = new Gson();
+            Movies movies = new Movies();
+            for(int x = 0; x < response[0].length(); x++) {
+                try {
+                    Log.e("gal",String.valueOf(response[0].getJSONObject(x).toString()));
+                    JSONObject temp = response[0].getJSONObject(x);
+                    Movie movie = gson.fromJson(String.valueOf(temp), Movie.class);
+                    movies.addMovie(movie);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    EventBus.getDefault().post(new MyEventError(3,e.toString()));
+                }
+            }
+            ((ApplicationMy) getApplication()).setMovies(movies);
+            return 1;
+        }
+
+        protected void onPostExecute(Integer result) {
+            Log.e("gal","KONCAL");
+            progressDialog.dismiss();
+            listView = (ListView)findViewById(R.id.list_view);
+            Movies movies = ((ApplicationMy) getApplication()).getMovies();
+            //Log.e("gdsadSADASDASDSADSASd",movies1.getList().toString());
+            movieListAdapter movieListAdapter = new movieListAdapter(getApplicationContext(), movies);
+            listView.setAdapter(movieListAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent i = new Intent(view.getContext(),MovieActivity.class);
+                    i.putExtra("position",position);
+                    startActivity(i);
+                }
+            });
+        }
+    }
+
 
     @Override
     protected void onStart() {
