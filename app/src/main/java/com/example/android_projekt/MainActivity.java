@@ -1,5 +1,6 @@
 package com.example.android_projekt;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -7,6 +8,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ProgressDialog progressDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
 
         this.setTitle("Movies List");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent = new Intent(this, WatclistActivity.class);
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
     }
 
     public class AsyncTaskMovies extends AsyncTask<JSONArray, Integer, Integer> {
