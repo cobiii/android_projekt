@@ -16,6 +16,7 @@ public class MovieActivity extends AppCompatActivity {
     TextView movieTitle;
     TextView movieGenre;
     TextView movieRating;
+    TextView movieRatingCount;
     TextView movieSynopsis;
     TextView movieDirector;
     TextView movieWriter;
@@ -35,6 +36,7 @@ public class MovieActivity extends AppCompatActivity {
         movieTitle = findViewById(R.id.movieTitle);
         movieGenre = findViewById(R.id.movieGenre);
         movieRating = findViewById(R.id.movieRating);
+        movieRatingCount = findViewById(R.id.movieRatingCount);
         movieSynopsis = findViewById(R.id.movieSynopsis);
         movieDirector = findViewById(R.id.movieDirector);
         movieWriter = findViewById(R.id.movieWriter);
@@ -43,9 +45,10 @@ public class MovieActivity extends AppCompatActivity {
         movieBoxOffice = findViewById(R.id.movieBoxOffice);
         moviePoster = findViewById(R.id.moviePoster);
 
-        movieTitle.setText(movieCurrent.getTitle());
+        movieTitle.setText(movieCurrent.getTitle() + "("+movieCurrent.getYear()+")");
         movieGenre.setText(movieCurrent.getGenre());
-        //movieRating.setText(movieCurrent.get());
+        movieRating.setText(String.format("%.1f",movieCurrent.getRating()));
+        movieRatingCount.setText(movieCurrent.getRatingCount().toString());
         movieSynopsis.setText(movieCurrent.getSynopsis());
         movieDirector.append(movieCurrent.getDirector());
         movieWriter.append(movieCurrent.getWriter());
