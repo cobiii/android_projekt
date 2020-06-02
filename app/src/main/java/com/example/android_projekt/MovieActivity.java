@@ -1,15 +1,21 @@
 package com.example.android_projekt;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +28,12 @@ import android.widget.TextView;
 import com.example.lib.Movie;
 import com.example.lib.Movies;
 import com.example.lib.WatchList;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
-public class MovieActivity extends AppCompatActivity {
+public class MovieActivity<LocationRequest> extends AppCompatActivity {
     TextView movieTitle;
     TextView movieGenre;
     TextView movieRating;
@@ -38,11 +47,17 @@ public class MovieActivity extends AppCompatActivity {
     ImageView moviePoster;
     Button movieAddToWatchlist;
 
+    // Location properties
+    private FusedLocationProviderClient fusedLocationClient;
+    double longitude;
+    double latitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_movie);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -96,11 +111,70 @@ public class MovieActivity extends AppCompatActivity {
                 watchList.addMovie(finalMovieCurrent);
                 ((ApplicationMy) getApplication()).setWatchList(watchList);
                 addNotification();
+                fetchLastLocation();
                 Log.e("GASDLSADASLDA",String.valueOf(((ApplicationMy) getApplication()).getWatchList().getList().size()));
             }
         });
 
     }
+    private void fetchLastLocation() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                showPermissionAlert();
+                return;
+            }
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            Log.e("LAST LOCATION: ", location.toString());
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                            Log.e("LONGITUDE: ", String.valueOf(longitude));
+                            Log.e("LATITUDE: ", String.valueOf(latitude));
+
+                            Uri gmmIntentUri = Uri.parse("geo:"+latitude+","+longitude);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(mapIntent);
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 123: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    // permission was denied, show alert to explain permission
+                    showPermissionAlert();
+                }else{
+                    //permission is granted now start a background service
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        fetchLastLocation();
+                    }
+                }
+            }
+        }
+    }
+
+    private void showPermissionAlert(){
+        if (ActivityCompat.checkSelfPermission(MovieActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MovieActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 123);
+        }
+    }
+
     private void addNotification() {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this,"notif")
