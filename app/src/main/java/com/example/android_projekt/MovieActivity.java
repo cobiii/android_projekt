@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,7 +49,8 @@ public class MovieActivity<LocationRequest> extends AppCompatActivity {
 
     // Location properties
     private FusedLocationProviderClient fusedLocationClient;
-
+    double longitude;
+    double latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,17 @@ public class MovieActivity<LocationRequest> extends AppCompatActivity {
                         if (location != null) {
                             // Logic to handle location object
                             Log.e("LAST LOCATION: ", location.toString());
+                            longitude = location.getLongitude();
+                            latitude = location.getLatitude();
+                            Log.e("LONGITUDE: ", String.valueOf(longitude));
+                            Log.e("LATITUDE: ", String.valueOf(latitude));
+
+                            Uri gmmIntentUri = Uri.parse("geo:"+latitude+","+longitude);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(mapIntent);
+                            }
                         }
                     }
                 });
