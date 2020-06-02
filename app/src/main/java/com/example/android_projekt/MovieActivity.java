@@ -1,7 +1,16 @@
 package com.example.android_projekt;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,9 +45,11 @@ public class MovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onResume() {
         super.onResume();
+        createNotificationChannel();
         Movies movies = new Movies();
         int position = getIntent().getIntExtra("position",10);
         Movie movieCurrent;
@@ -84,9 +95,45 @@ public class MovieActivity extends AppCompatActivity {
                 WatchList watchList = ((ApplicationMy) getApplication()).getWatchList();
                 watchList.addMovie(finalMovieCurrent);
                 ((ApplicationMy) getApplication()).setWatchList(watchList);
+                addNotification();
                 Log.e("GASDLSADASLDA",String.valueOf(((ApplicationMy) getApplication()).getWatchList().getList().size()));
             }
         });
 
+    }
+    private void addNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this,"notif")
+                        .setSmallIcon(R.drawable.ic_notifications_none_black_24dp)
+                        .setContentTitle("Don't Forget To Watch")
+                        .setContentText("Successfully added to your watchlist.")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Intent notifyIntent = new Intent(this, WatclistActivity.class);
+        // Set the Activity to start in a new, empty task
+        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // Create the PendingIntent
+        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
+                this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        builder.setContentIntent(notifyPendingIntent);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        notificationManager.notify(10,builder.build());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createNotificationChannel() {
+        CharSequence name = "ime";
+        String description = "desc";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("notif",name,importance);
+        channel.setDescription(description);
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
     }
 }
