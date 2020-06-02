@@ -33,6 +33,14 @@ public class ApplicationMy extends Application {
         this.movies = movies;
     }
 
+    public WatchList getWatchList() {
+        return watchList;
+    }
+
+    public void setWatchList(WatchList movies) {
+        this.watchList = watchList;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
