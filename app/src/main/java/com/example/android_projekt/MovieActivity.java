@@ -34,14 +34,21 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_movie);
-        Movies movies = ((ApplicationMy)getApplication()).getMovies();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Movies movies = new Movies();
         int position = getIntent().getIntExtra("position",10);
-        Movie movieCurrent = movies.getList().get(position);
+        Movie movieCurrent;
         if(getIntent().hasExtra("watchlist")) {
             WatchList watchList = ((ApplicationMy)getApplication()).getWatchList();
             movies.setList(watchList.getList());
-            movieCurrent = movies.getList().get(position);
+        } else {
+            movies = ((ApplicationMy)getApplication()).getMovies();
         }
+        movieCurrent = movies.getList().get(position);
 
         movieTitle = findViewById(R.id.movieTitle);
         movieGenre = findViewById(R.id.movieGenre);
@@ -67,7 +74,7 @@ public class MovieActivity extends AppCompatActivity {
         Picasso.get().load(movieCurrent.getPoster()).into(moviePoster);
         //movieBoxOffice.append(movieCurrent.getBoxoffice().toString());
 
-        Log.i("gal",String.valueOf(movies.getList().size()));
+        Log.e("gal",String.valueOf(movies.getList().size() +" "+position));
 
         movieAddToWatchlist = findViewById(R.id.movieAddToWatchlist);
         final Movie finalMovieCurrent = movieCurrent;
@@ -80,5 +87,6 @@ public class MovieActivity extends AppCompatActivity {
                 Log.e("GASDLSADASLDA",String.valueOf(((ApplicationMy) getApplication()).getWatchList().getList().size()));
             }
         });
+
     }
 }

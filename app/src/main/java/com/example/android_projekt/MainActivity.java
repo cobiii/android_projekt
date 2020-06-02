@@ -134,9 +134,15 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+            Log.e("gal",String.valueOf(listView.getCount()));
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ((ApplicationMy)getApplication()).saveToFile();
+    }
 
     @Override
     protected void onStart() {
@@ -149,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-
+        ((ApplicationMy)getApplication()).saveToFile();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
